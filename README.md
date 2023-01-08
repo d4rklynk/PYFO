@@ -1,5 +1,5 @@
 # PYFO
-PYFO (Put Your Fedora On) is a post-install script for upstream version of fedora. It also aims for hardening Fedora.
+PYFO (Put Your Fedora On) is a post-install script for upstream version of fedora. It also focuses on security.
 
 This script has been tested for Fedora Workstation 37.
 
