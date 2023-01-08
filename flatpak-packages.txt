@@ -1,0 +1,8 @@
+org.signal.Signal
+com.discordapp.Discord
+com.spotify.Client
+net.lutris.Lutris
+com.mojang.Minecraft
+com.visualstudio.code
+org.onlyoffice.desktopeditors
+org.gimp.GIMP
