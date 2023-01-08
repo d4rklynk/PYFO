@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 HEIGHT=20
 WIDTH=90
 CHOICE_HEIGHT=4
