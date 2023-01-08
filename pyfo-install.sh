@@ -15,9 +15,9 @@ if [ $(rpm -q dialog 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
 sudo dnf install -y dialog
 fi
 
-OPTIONS=(1 "Update your system - Do that first if you didn't already"
+OPTIONS=(1 "Update your system - Do that first if you did not already"
          2 "Enable AutoUpdates - Recommended"        
-         3 "Install Basic Software (check "cat basic-softwares" file for more information)"
+         3 "Install Basic Software check cat basic-softwares file for more information"
          4 "Enable RPM Fusion - Enables the RPM Fusion repos for your specific version"
          5 "Update Firmware - If your system supports fw update delivery"
          6 "Speed up DNF - This enables fastestmirror, max downloads and deltarpms"
@@ -30,7 +30,7 @@ OPTIONS=(1 "Update your system - Do that first if you didn't already"
          13 "Install Nvidia - Install akmod nvidia drivers"
          14 "Install linux-hardened - A linux hardened package from my COPR repo"
          15 "Install hardened_malloc - A hardened_malloc package for fedora"
-         16 "Set default for hardened_malloc - If you don't know, do nothing"
+         16 "Set default for hardened_malloc - If you dont know, do nothing"
 	 99 "Quit")
 
 while [ "$CHOICE -ne 4" ]; do
