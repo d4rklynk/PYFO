@@ -2,3 +2,4 @@ google-chrome-stable
 steam
 unzip
 unrar
+virt-manager

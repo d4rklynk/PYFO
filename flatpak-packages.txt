@@ -7,3 +7,8 @@ com.visualstudio.code
 org.onlyoffice.desktopeditors
 org.gimp.GIMP
 org.videolan.VLC
+im.riot.Riot
+com.bitwarden.desktop
+net.cozic.joplin_desktop
+org.flameshot.Flameshot
+org.qbittorrent.qBittorrent
