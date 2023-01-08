@@ -77,7 +77,18 @@ while [ "$CHOICE -ne 4" ]; do
             sudo fwupdmgr get-devices 
             sudo fwupdmgr refresh --force 
             sudo fwupdmgr get-updates 
-            sudo fwupdmgr updatecho "Set hardening_malloc to default"ps://flathub.org/repo/flathub.flatpakrepo
+            sudo fwupdmgr update
+            ;;
+        6)
+            echo "Speeding Up DNF"
+            echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
+            echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
+            echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
+            notify-send "Your DNF config has now been amended" --expire-time=10
+           ;;
+        7)
+            echo "Enabling Flatpak"
+            flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             flatpak update
             flatpak install flathub com.github.tchx84.Flatseal
             source 'flatpak-install.sh'
