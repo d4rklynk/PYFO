@@ -21,16 +21,17 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          5 "Update Firmware - If your system supports fw update delivery"
          6 "Speed up DNF - This enables fastestmirror, max downloads and deltarpms"
          7 "Enable Flatpak - Enables the Flatpak repo and installs packages"
-         8 "Install Extras Software - Installs a bunch of my most used software"
-         9 "Install Brave - Recommended, installed from official repo"
-         10 "Install Videos packages - Video codec and stuff as per the official doc"
-         11 "Install Oh-My-ZSH - ZSH will be also installed"
-         12 "Install minimal Oh-My-ZSH plugins"
-         13 "Install Nvidia - Install akmod nvidia drivers"
-         14 "Install linux-hardened - A linux hardened package from my COPR repo"
-         15 "Install hardened_malloc - A hardened_malloc package for fedora"
-         16 "Set default for hardened_malloc - If you don't know, do nothing"
-         17 "More hardening tweaks - NTS time, umask, firewall"
+         8 "Install some flatpak software - Check flaptak-packages.txt"
+         9 "Install Extras Software - Installs a bunch of my most used software"
+         10 "Install Brave - Recommended, installed from official repo"
+         11 "Install Videos packages - Video codec and stuff as per the official doc"
+         12 "Install Oh-My-ZSH - ZSH will be also installed"
+         13 "Install minimal Oh-My-ZSH plugins"
+         14 "Install Nvidia - Install akmod nvidia drivers"
+         15 "Install linux-hardened - A linux hardened package from my COPR repo"
+         16 "Install hardened_malloc - A hardened_malloc package for fedora"
+         17 "Set default for hardened_malloc - If you don't know, do nothing"
+         18 "More hardening tweaks - NTS time, umask, firewall"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -91,15 +92,18 @@ while [ "$CHOICE -ne 4" ]; do
             flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             flatpak update
             flatpak install flathub com.github.tchx84.Flatseal
-            source 'flatpak-install.sh'
             notify-send "Flatpak has now been enabled and Flatseal is installed" --expire-time=10
             ;;
-        8)  
+        8)
+            echo "Install some flatpak software"
+            source 'flatpak-install.sh'
+            ;;    
+        9)  
             echo "Installing Extras Software"
             sudo dnf install -y $(cat dnf-packages.txt)
             notify-send "Extras Software have been installed" --expire-time=10
             ;;
-        9)  
+        10)  
             echo "Installing Brave"
             sudo dnf install dnf-plugins-core
             sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
@@ -107,7 +111,7 @@ while [ "$CHOICE -ne 4" ]; do
             sudo dnf install brave-browser
             notify-send "Brave has been installed" --expire-time=10
             ;;
-        10)  
+        11)  
             echo "Installing Videos packages"
             sudo dnf install gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
             sudo dnf install -y lame\* --exclude=lame-devel
@@ -115,7 +119,7 @@ while [ "$CHOICE -ne 4" ]; do
             sudo dnf update -y
             notify-send "All done" --expire-time=10
            ;;
-        11)  
+        12)  
             echo "Installing Oh-My-Zsh"
             sudo dnf -y install zsh util-linux-user
             sh -c "$(curl -fsSL $OH_MY_ZSH_URL)"
@@ -123,18 +127,18 @@ while [ "$CHOICE -ne 4" ]; do
             chsh -s "$(which zsh)"
             notify-send "Oh-My-Zsh is ready to rock n roll" --expire-time=10
             ;;
-        12)  
+        13)  
             echo "Installing minimal Oh-My-ZSH plugins"
             git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
             curl -fsSL https://raw.githubusercontent.com/d4rklynk/my-zsh-config/main/.zshrc > ~/.zshrc
             notify-send "Plugins have been installed" --expire-time=10
             ;;
-        13)  
+        14)  
             echo "Installing Nvidia Driver Akmod-Nvidia"
             sudo dnf install -y akmod-nvidia
             notify-send "All done" --expire-time=10
 	       ;;
-        14)
+        15)
             echo "Hardening kernel"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install kernel-hardened
@@ -142,18 +146,18 @@ while [ "$CHOICE -ne 4" ]; do
             sudo chown root:root /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
             notify-send "Kernel is hardened (you must reboot to make it effective)" --expire-time=10
            ;;
-        15)
+        16)
             echo "Installing hardened_malloc"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install hardened_malloc
             notify-send "hardened_malloc installed (you must reboot to make it effective)" --expire-time=10
            ;;
-        16)
+        17)
             echo "Set hardening_malloc to default"
             sudo echo "libhardened_malloc.so" > /etc/ld.so.preload
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
            ;;
-        17)
+        18)
             echo "Set umask to 077 for all users instead of 022"
             echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh
             echo "Set firewall to drop zone"
