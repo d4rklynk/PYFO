@@ -142,8 +142,7 @@ while [ "$CHOICE -ne 4" ]; do
             echo "Hardening kernel"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install kernel-hardened
-            echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
-            sudo chown root:root /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
+            sudo bash -c 'echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf'
             notify-send "Kernel is hardened (you must reboot to make it effective)" --expire-time=10
            ;;
         16)
@@ -154,18 +153,18 @@ while [ "$CHOICE -ne 4" ]; do
            ;;
         17)
             echo "Set hardening_malloc to default"
-            sudo echo "libhardened_malloc.so" > /etc/ld.so.preload
+            sudo bash -c 'echo "libhardened_malloc.so" > /etc/ld.so.preload '
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
            ;;
         18)
             echo "Set umask to 077 for all users instead of 022"
-            echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh
+            sudo bash -c 'echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh'
             echo "Set firewall to drop zone"
             firewall-cmd --set-default-zone=drop
             firewall-cmd --add-protocol=ipv6-icmp --permanent
             firewall-cmd --add-service=dhcpv6-client --permanent
             echo "Replicate chrony.conf from GrapheneOS"
-            sudo curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf
+            sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
             sudo systemctl restart chronyd
             echo "Hardening tweaks have been set up, you should reboot"
            ;;
