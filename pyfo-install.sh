@@ -137,7 +137,8 @@ while [ "$CHOICE -ne 4" ]; do
             echo "Hardening kernel"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install kernel-hardened
-            sudo echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
+            echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
+            sudo chown root:root /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
             notify-send "Kernel is hardened (you must reboot to make it effective)" --expire-time=10
            ;;
         15)
