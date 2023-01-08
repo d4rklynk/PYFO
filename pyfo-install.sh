@@ -23,12 +23,13 @@ OPTIONS=(1 "Update your system - Do that first if you didn't already"
          7 "Enable Flatpak - Enables the Flatpak repo and installs packages"
          8 "Install Extras Software - Installs a bunch of my most used software"
          9 "Install Brave - Recommended, installed from offical repo"
-         10 "Install Oh-My-ZSH"
-         11 "Install minimal Oh-My-ZSH plugins"
-         12 "Install Nvidia - Install akmod nvidia drivers"
-         13 "Install linux-hardened - A linux hardened package from my COPR repo"
-         14 "Install hardened_malloc - A hardened_malloc package for fedora"
-         15 "Set default for hardened_malloc - If you don't know, do nothing"
+         10 "Install Videos packages - Video codec and stuff as per the official doc"
+         11 "Install Oh-My-ZSH - ZSH will be also installed"
+         12 "Install minimal Oh-My-ZSH plugins"
+         13 "Install Nvidia - Install akmod nvidia drivers"
+         14 "Install linux-hardened - A linux hardened package from my COPR repo"
+         15 "Install hardened_malloc - A hardened_malloc package for fedora"
+         16 "Set default for hardened_malloc - If you don't know, do nothing"
 	 99 "Quit")
 
 while [ "$CHOICE -ne 4" ]; do
@@ -104,15 +105,15 @@ while [ "$CHOICE -ne 4" ]; do
             sudo dnf install brave-browser
             notify-send "Brave has been installed" --expire-time=10
             ;;
-        8)  
-            echo "Installing Extras"
+        10)  
+            echo "Installing Videos packages"
             sudo dnf install gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
             sudo dnf install -y lame\* --exclude=lame-devel
             sudo dnf group upgrade -y --with-optional Multimedia
             sudo dnf update -y
             notify-send "All done" --expire-time=10
            ;;
-        10)  
+        11)  
             echo "Installing Oh-My-Zsh"
             sudo dnf -y install zsh util-linux-user
             sh -c "$(curl -fsSL $OH_MY_ZSH_URL)"
@@ -120,31 +121,31 @@ while [ "$CHOICE -ne 4" ]; do
             chsh -s "$(which zsh)"
             notify-send "Oh-My-Zsh is ready to rock n roll" --expire-time=10
             ;;
-        11)  
+        12)  
             echo "Installing minimal Oh-My-ZSH plugins"
             git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
             curl -fsSL https://raw.githubusercontent.com/d4rklynk/my-zsh-config/main/.zshrc > ~/.zshrc
             notify-send "Plugins have been installed" --expire-time=10
             ;;
-        12)  
+        13)  
             echo "Installing Nvidia Driver Akmod-Nvidia"
             sudo dnf install -y akmod-nvidia
             notify-send "All done" --expire-time=10
 	       ;;
-        13)
+        14)
             echo "Hardening kernel"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install kernel-hardened
             sudo echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf
             notify-send "Kernel is hardened (you must reboot to make it effective)" --expire-time=10
            ;;
-        14)
+        15)
             echo "Installing hardened_malloc"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install hardened_malloc
             notify-send "hardened_malloc installed (you must reboot to make it effective)" --expire-time=10
            ;;
-        15)
+        16)
             echo "Set hardening_malloc to default"
             sudo echo "libhardened_malloc.so" > /etc/ld.so.preload
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
