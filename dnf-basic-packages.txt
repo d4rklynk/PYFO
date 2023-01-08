@@ -1,4 +1,3 @@
 gnome-extensions-app
 gnome-tweaks
-vlc
 vim

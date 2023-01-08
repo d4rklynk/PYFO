@@ -6,3 +6,4 @@ com.mojang.Minecraft
 com.visualstudio.code
 org.onlyoffice.desktopeditors
 org.gimp.GIMP
+org.videolan.VLC
