@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HEIGHT=20
 WIDTH=90
 CHOICE_HEIGHT=4
