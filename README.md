@@ -11,13 +11,17 @@ This script is mostly based on osiris2600's [script](https://github.com/osiris26
 ## Install
 
 Clone this repo
+
 `git clone https://github.com/d4rklynk/PYFO.git`
 
 Switch directory
+
 `cd ~/PYFO`
 
 Make it executable
+
 `chmod +x pyfo-install.sh`
 
 Execute it
+
 `./pyfo-install.sh`
