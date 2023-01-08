@@ -33,7 +33,7 @@ OPTIONS=(1 "Update your system - Do that first if you didn't already"
          16 "Set default for hardened_malloc - If you don't know, do nothing"
 	 99 "Quit")
 
-while [ "$CHOICE -ne 4" ]; do
+while [ "$CHOICE" -ne 4 ]; do
     CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
                 --title "$TITLE" \
