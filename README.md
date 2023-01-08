@@ -7,3 +7,17 @@ It is meant to use right after you installed Fedora. This script will just insta
 So you will not have a bunch of sketchy software that you don't need.
 
 This script is mostly based on osiris2600's [script](https://github.com/osiris2600/fedora-setup)
+
+## Install
+
+Clone this repo
+`git clone https://github.com/d4rklynk/PYFO.git`
+
+Switch directory
+`cd ~/PYFO`
+
+Make it executable
+`chmod +x pyfo-install.sh`
+
+Execute it
+`./pyfo-install.sh`
