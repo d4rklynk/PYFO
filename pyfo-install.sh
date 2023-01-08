@@ -14,11 +14,6 @@ OH_MY_ZSH_URL="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/in
 if [ $(rpm -q dialog 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
 sudo dnf install -y dialog
 fi
-#Check to see if git is installed, if not install it
-if [ $(rpm -q git 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
-sudo dnf install -y git
-fi
-
 
 OPTIONS=(1 "Update your system - Do that first if you didn't already"
          2 "Enable AutoUpdates - Recommended"        
