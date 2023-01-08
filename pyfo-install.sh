@@ -30,6 +30,8 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          14 "Install linux-hardened - A linux hardened package from my COPR repo"
          15 "Install hardened_malloc - A hardened_malloc package for fedora"
          16 "Set default for hardened_malloc - If you don't know, do nothing"
+         17 "More hardening tweaks - NTS time, umask, firewall"
+         98 "Reboot your system"
 	 99 "Quit")
 
 while [ "$CHOICE -ne 4" ]; do
@@ -75,18 +77,7 @@ while [ "$CHOICE -ne 4" ]; do
             sudo fwupdmgr get-devices 
             sudo fwupdmgr refresh --force 
             sudo fwupdmgr get-updates 
-            sudo fwupdmgr update
-            ;;
-        6)  
-            echo "Speeding Up DNF"
-            echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-            echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-            echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
-            notify-send "Your DNF config has now been amended" --expire-time=10
-            ;;
-        7)  
-            echo "Enabling Flatpak"
-            flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+            sudo fwupdmgr updatecho "Set hardening_malloc to default"ps://flathub.org/repo/flathub.flatpakrepo
             flatpak update
             flatpak install flathub com.github.tchx84.Flatseal
             source 'flatpak-install.sh'
@@ -150,6 +141,22 @@ while [ "$CHOICE -ne 4" ]; do
             echo "Set hardening_malloc to default"
             sudo echo "libhardened_malloc.so" > /etc/ld.so.preload
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
+           ;;
+        17)
+            echo "Set umask to 077 for all users instead of 022"
+            echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh
+            echo "Set firewall to drop zone"
+            firewall-cmd --set-default-zone=drop
+            firewall-cmd --add-protocol=ipv6-icmp --permanent
+            firewall-cmd --add-service=dhcpv6-client --permanent
+            echo "Replicate chrony.conf from GrapheneOS"
+            sudo curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf
+            sudo systemctl restart chronyd
+            echo "Hardening tweaks have been set up, you should reboot"
+           ;;
+        98)
+            echo "Reboot"
+            shutdown -r now
            ;;
         99)
           exit 0
