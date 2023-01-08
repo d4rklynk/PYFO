@@ -5,3 +5,5 @@ This script has been tested for Fedora Workstation 37.
 
 It is meant to use right after you installed Fedora. This script will just install needed software that most people probably use.
 So you will not have a bunch of sketchy software that you don't need.
+
+This script is mostly based on osiris2600's [script](https://github.com/osiris2600/fedora-setup)
