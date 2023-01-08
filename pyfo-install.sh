@@ -105,10 +105,10 @@ while [ "$CHOICE -ne 4" ]; do
             ;;
         10)  
             echo "Installing Brave"
-            sudo dnf install dnf-plugins-core
+            sudo dnf install -y dnf-plugins-core
             sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
             sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-            sudo dnf install brave-browser
+            sudo dnf install -y brave-browser
             notify-send "Brave has been installed" --expire-time=10
             ;;
         11)  
@@ -141,14 +141,14 @@ while [ "$CHOICE -ne 4" ]; do
         15)
             echo "Hardening kernel"
             sudo dnf copr enable samsepi0l/HardHatOS
-            sudo dnf install kernel-hardened
+            sudo dnf install -y kernel-hardened
             sudo bash -c 'echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf'
             notify-send "Kernel is hardened (you must reboot to make it effective)" --expire-time=10
            ;;
         16)
             echo "Installing hardened_malloc"
             sudo dnf copr enable samsepi0l/HardHatOS
-            sudo dnf install hardened_malloc
+            sudo dnf install -y hardened_malloc
             notify-send "hardened_malloc installed (you must reboot to make it effective)" --expire-time=10
            ;;
         17)
