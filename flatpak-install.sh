@@ -6,11 +6,8 @@ if ! flatpak --version > /dev/null 2>&1; then
   exit 1
 fi
 
-# Read the list of packages from the text file
-PACKAGES=$(cat flatpak-packages.txt)
-
 # Install the packages using flatpak
-for PACKAGE in $PACKAGES; do
+for PACKAGE in cat flatpak-packages.txt; do
   flatpak install -y $PACKAGE
 done
 

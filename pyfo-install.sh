@@ -35,7 +35,7 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          98 "Reboot your system"
 	 99 "Quit")
 
-while [ "$CHOICE -ne 4" ]; do
+while [ "$CHOICE" -ne "4" ]; do
     CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
                 --title "$TITLE" \
