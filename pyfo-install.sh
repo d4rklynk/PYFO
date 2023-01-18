@@ -70,9 +70,8 @@ while [ "$CHOICE -ne 4" ]; do
         4)  
             echo "Enabling RPM Fusion"
             sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-	        sudo dnf upgrade --refresh
+	    sudo dnf upgrade --refresh
             sudo dnf group update -y core
-            sudo dnf install -y rpmfusion-free-release-tainted
             sudo dnf install -y dnf-plugins-core
             notify-send "RPM Fusion Enabled" --expire-time=10
             ;;
@@ -148,8 +147,19 @@ while [ "$CHOICE -ne 4" ]; do
             notify-send "kernel-hardened has been installed (you must reboot to make it effective)" --expire-time=10
            ;;
 	16)
-	    echo "Hardening Fedora [WIP]"
-	    echo "WIP"
+	    echo "Hardening Fedora"
+	    ### Download sysctl files from kicksecure
+	    echo "Downloading sysctl files from kicksecure"
+	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf > /etc/sysctl.d/30_security-misc.conf'
+	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_silent-kernel-printk.conf > /etc/sysctl.d/30_silent-kernel-printk.conf'
+	    ### Harden boot parameters
+	    echo "Hardening Boot paramaters"
+	    sudo bash -c 'sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="slab_nomerge init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on vsyscall=none debugfs=off oops=panic lockdown=confidentiality mce=0 quiet loglevel=0 spectre_v2=on spec_store_bypass_disable=on tsx=off tsx_async_abort=full,nosmt mds=full,nosmt l1tf=full,force nosmt=force kvm.nx_huge_pages=force randomize_kstack_offset=on
+"''
+	    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+	    echo "You can add "module.sig_enforce=1" if you signed your Nvidia drivers"
+	    ### Modules blacklisting
+	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf > /etc/modprobe.d/30_security-misc.conf'
 	    notify-send "Fedora is hardened (you must reboot to make it effective)" --expire-time=10
         17)
             echo "Installing hardened_malloc"
@@ -159,16 +169,19 @@ while [ "$CHOICE -ne 4" ]; do
            ;;
         18)
             echo "Set hardening_malloc to default"
-            sudo bash -c 'echo "libhardened_malloc.so" > /etc/ld.so.preload '
+    	    sudo bash -c 'echo "libhardened_malloc.so" > /etc/ld.so.preload'
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
            ;;
         19)
+	    ### umask 
             echo "Set umask to 077 for all users instead of 022"
             sudo bash -c 'echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh'
+	    ### Firewall
             echo "Set firewall to drop zone"
             firewall-cmd --set-default-zone=drop
             firewall-cmd --add-protocol=ipv6-icmp --permanent
             firewall-cmd --add-service=dhcpv6-client --permanent
+	    ### NTS
             echo "Replicate chrony.conf from GrapheneOS"
             sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
             sudo systemctl restart chronyd
