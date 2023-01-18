@@ -161,6 +161,7 @@ while [ "$CHOICE -ne 4" ]; do
 	    ### Modules blacklisting
 	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf > /etc/modprobe.d/30_security-misc.conf'
 	    notify-send "Fedora is hardened (you must reboot to make it effective)" --expire-time=10
+	    ;;       
         17)
             echo "Installing hardened_malloc"
             sudo dnf copr enable samsepi0l/HardHatOS
