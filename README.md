@@ -11,8 +11,7 @@ So you will not have a bunch of sketchy software that you don't need.
 ## NVidia
 
 You can't use NVidia drivers **with** the linux-hardened package.
-
-For secure boot, you will have to [autosign](https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/kernel-module-driver-configuration/Working_with_Kernel_Modules/#sect-signing-kernel-modules-for-secure-boot) your kernel every update with Nvidia. You should make a script which will go in `/etc/kernel/postinst.d`.
+You need to sign your Nvidia modules.
 
 ## Install
 
