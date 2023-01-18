@@ -35,7 +35,7 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          98 "Reboot your system"
 	 99 "Quit")
 
-while [ "$CHOICE" -ne "4" ]; do
+while [ "$CHOICE -ne 4" ]; do
     CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
                 --title "$TITLE" \
@@ -61,7 +61,7 @@ while [ "$CHOICE" -ne "4" ]; do
             ;;
         3)
             echo "Install Basic Software"
-            sudo dnf install -y $(cat dnf-basic-packages.txt)
+            sudo dnf install -y $(cat basic-dnf.txt)
             notify-send "Basic Software have been installed" --expire-time=10
             ;;
         4)  
@@ -100,7 +100,7 @@ while [ "$CHOICE" -ne "4" ]; do
             ;;    
         9)  
             echo "Installing Extras Software"
-            sudo dnf install -y $(cat dnf-packages.txt)
+            sudo dnf install -y $(cat extras-dnf.txt)
             notify-send "Extras Software have been installed" --expire-time=10
             ;;
         10)  
