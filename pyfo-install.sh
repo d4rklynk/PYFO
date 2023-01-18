@@ -33,6 +33,7 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          17 "Install hardened_malloc - A hardened_malloc package for fedora"
          18 "Set default for hardened_malloc - If you don't know, do nothing"
          19 "More hardening tweaks - NTS time, umask, firewall"
+	 20 "Set vim your default editor - Because who use nano"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -176,7 +177,7 @@ while [ "$CHOICE -ne 4" ]; do
         19)
 	    ### umask 
             echo "Set umask to 077 for all users instead of 022"
-            sudo bash -c 'echo "umask 077" >  cat /etc/profile.d/set-umask077-for-all-users.sh'
+            sudo bash -c 'echo "umask 077" > /etc/profile.d/set-umask077-for-all-users.sh'
 	    ### Firewall
             echo "Set firewall to drop zone"
             firewall-cmd --set-default-zone=drop
@@ -188,6 +189,11 @@ while [ "$CHOICE -ne 4" ]; do
             sudo systemctl restart chronyd
             echo "Hardening tweaks have been set up, you should reboot"
            ;;
+	20)
+	   ### vim default editor
+	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
+	   sudo bash -c 'echo "if [ -z "$EDITOR" ]; then export EDITOR="/usr/bin/vim"; fi"' > /etc/profile.d/vim-default-editor.sh
+	   ;;
         98)
             echo "Reboot"
             shutdown -r now
