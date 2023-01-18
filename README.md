@@ -8,11 +8,11 @@ So you will not have a bunch of sketchy software that you don't need.
 
 *N.B: This script is mostly based on osiris2600's [script](https://github.com/osiris2600/fedora-setup)*
 
-## Secure boot
+## NVidia
 
-If you want to want install Nvidia drivers and/or kernel-hardened while having secure boot enabled, you will have to [autosign](https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/kernel-module-driver-configuration/Working_with_Kernel_Modules/#sect-signing-kernel-modules-for-secure-boot) your kernel every update with Nvidia. You should make a script which will go in `/etc/kernel/postinst.d`
+You can't use NVidia drivers **with** the linux-hardened package.
 
-This script should not be used with secure boot as it is [completely](https://privsec.dev/posts/linux/linux-insecurities/#lack-of-verified-boot) [flawed](https://madaidans-insecurities.github.io/guides/linux-hardening.html#verified-boot) [anyway](https://privsec.dev/posts/linux/desktop-linux-hardening/#secure-boot). [If you still want secure boot on Linux](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot), you should remove third party certificates in your motherboard, sign the bootloader with your own signature, protect your private key, use dm-verity to verify the integrity of the kernel and so on and so forth. If you want decent security, just don't use Linux.
+For secure boot, you will have to [autosign](https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/kernel-module-driver-configuration/Working_with_Kernel_Modules/#sect-signing-kernel-modules-for-secure-boot) your kernel every update with Nvidia. You should make a script which will go in `/etc/kernel/postinst.d`.
 
 ## Install
 
