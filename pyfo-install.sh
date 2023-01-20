@@ -179,9 +179,9 @@ while [ "$CHOICE -ne 4" ]; do
             sudo bash -c 'echo "umask 077" > /etc/profile.d/set-umask077-for-all-users.sh'
 	    ### Firewall
             echo "Set firewall to drop zone"
-            firewall-cmd --set-default-zone=drop
-            firewall-cmd --add-protocol=ipv6-icmp --permanent
-            firewall-cmd --add-service=dhcpv6-client --permanent
+            sudo firewall-cmd --set-default-zone=drop
+            sudo firewall-cmd --add-protocol=ipv6-icmp --permanent
+            sudo firewall-cmd --add-service=dhcpv6-client --permanent
 	    ### NTS
             echo "Replicate chrony.conf from GrapheneOS"
             sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
