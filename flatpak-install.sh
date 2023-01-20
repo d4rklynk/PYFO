@@ -7,7 +7,7 @@ if ! flatpak --version > /dev/null 2>&1; then
 fi
 
 # Install the packages using flatpak
-for PACKAGE in cat flatpak-packages.txt; do
+for PACKAGE in $(cat flatpak-packages.txt); do
   flatpak install -y $PACKAGE
 done
 
