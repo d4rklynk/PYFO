@@ -191,7 +191,7 @@ while [ "$CHOICE -ne 4" ]; do
 	20)
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
-	   sudo bash -c 'echo "if [ -z "$EDITOR" ]; then export EDITOR="/usr/bin/vim"; fi"' > /etc/profile.d/vim-default-editor.sh
+	   echo "if [ -z "$EDITOR" ]; then export EDITOR="/usr/bin/vim"; fi" | sudo tee /etc/profile.d/vim-default-editor.sh
 	   ;;
         98)
             echo "Reboot"
