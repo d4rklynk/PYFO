@@ -211,7 +211,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   sudo dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
 	   git clone https://github.com/vinceliuice/Orchis-theme.git ~/Downloads/Orchis-theme
 	   pushd ~/Downloads/Orchis-theme
-	   ./install.sh -h --tweaks compact macos
+	   ./install.sh -l --tweaks compact macos
 	   gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com 
 	   gsettings set org.gnome.shell.extensions.user-theme name "Orchis"
 	   gsettings set org.gnome.desktop.interface gtk-theme "Orchis"
