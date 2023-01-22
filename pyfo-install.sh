@@ -34,7 +34,9 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          18 "More hardening tweaks - NTS time, umask, firewall"
 	 19 "Set vim your default editor - Because who use nano"
 	 20 "Debloat fedora"
-	 21 "Add maximise, minimise, close titlebars buttons"
+	 21 "Install Orchis shell theme"
+	 22 "Install Tela Circle Icons theme"
+	 23 "Gnome layout settings - Clock 24h format, titlebar buttons"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -205,8 +207,32 @@ while [ "$CHOICE -ne 4" ]; do
 	   sudo dnf -y remove nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent teamd tcpdump sgpio adcli libreoffice* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour NetworkManager-vpnc-gnome podman* *speech* sos totem eog dmidecode yajl ibus-hangui vino twolame-libs realmd net-snmp-libs mtr geolite2* gnome-calendar gnome-weather cheese gnome-contacts ibus-typing-booster *m17n* mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* dos2unix kpartx rng-tools ppp* xfs* tracker* thermald *perl* gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* *hangul*
 	   ;;
 	21)
-	   ### Gsettings buttons
-	   gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+	   ### Install Orchis Theme
+	   sudo dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
+	   git clone https://github.com/vinceliuice/Orchis-theme.git ~/Downloads/Orchis-theme
+	   pushd ~/Downloads/Orchis-theme
+	   ./install.sh -h --tweaks compact macos
+	   gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com 
+	   gsettings set org.gnome.shell.extensions.user-theme name "Orchis"
+	   gsettings set org.gnome.desktop.interface gtk-theme "Orchis"
+	   ;;
+	22)
+	   ### Install Tela circle icons theme
+	   git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git ~/Downloads/Tela-circle-icon-theme
+	   pushd ~/Downloads/Tela-circle-icon-theme
+	   ./install.sh -c
+	   gsettings set org.gnome.desktop.interface icon-theme "Tela-circle"
+	   ;;
+	23)
+	   # Clocks and calendar settings
+	   gsettings set org.gnome.desktop.interface clock-format '24h'
+	   gsettings set org.gnome.desktop.interface clock-show-date true
+	   gsettings set org.gnome.desktop.interface clock-show-seconds true
+	   gsettings set org.gnome.desktop.interface clock-show-weekday true
+	   # Enable window buttons
+	   gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
+	   # Set new windows centered
+	   gsettings set org.gnome.mutter center-new-windows true
 	   ;;
         98)
             echo "Reboot"
