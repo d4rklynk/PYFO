@@ -33,10 +33,9 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          17 "Set default for hardened_malloc - If you don't know, do nothing"
          18 "More hardening tweaks - NTS time, umask, firewall"
 	 19 "Set vim your default editor - Because who use nano"
-	 20 "Debloat fedora"
-	 21 "Install Orchis shell theme"
-	 22 "Install Tela Circle Icons theme"
-	 23 "Gnome layout settings - Clock 24h format, titlebar buttons"
+	 20 "Install Orchis shell theme"
+	 21 "Install Tela Circle Icons theme"
+	 22 "Gnome layout settings - Clock 24h format, titlebar buttons"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -201,10 +200,6 @@ while [ "$CHOICE -ne 4" ]; do
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
 	   echo "if [ -z "$EDITOR" ]; then export EDITOR="/usr/bin/vim"; fi" | sudo tee /etc/profile.d/vim-default-editor.sh
-	   ;;
-	20)
-	   ### Debloating
-	   sudo dnf --skip-broken remove nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent teamd tcpdump sgpio adcli libreoffice* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour NetworkManager-vpnc-gnome podman* *speech* sos totem eog dmidecode yajl ibus-hangui vino realmd net-snmp-libs mtr geolite2* gnome-calendar gnome-weather cheese gnome-contacts ibus-typing-booster *m17n* mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* dos2unix kpartx rng-tools ppp* xfs* tracker* thermald *perl* gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list *hangul*
 	   ;;
 	21)
 	   ### Install Orchis Theme
