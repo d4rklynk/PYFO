@@ -15,7 +15,7 @@ sudo dnf install -y dialog
 fi
 
 OPTIONS=(1 "Update your system - Do that first if you did not already"
-         2 "Speed up DNF - This enables fastestmirror, max downloads and deltarpms""Enable AutoUpdates - Recommended"     
+         2 "Speed up DNF - This enables fastestmirror, max downloads and deltarpms"   
          3 "Enable AutoUpdates - Recommended"
          4 "Enable RPM Fusion - Enables the RPM Fusion repos for your specific version"
          5 "Update Firmware - If your system supports fw update delivery"
