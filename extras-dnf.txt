@@ -2,7 +2,7 @@ steam
 unzip
 unrar
 virt-manager
-git
+git-core
 gnome-shell-extension-openweather
 gnome-shell-extension-user-theme
 yubioath-desktop
