@@ -204,7 +204,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   ;;
 	20)
 	   ### Debloating
-	   sudo dnf -y remove nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent teamd tcpdump sgpio adcli libreoffice* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour NetworkManager-vpnc-gnome podman* *speech* sos totem eog dmidecode yajl ibus-hangui vino twolame-libs realmd net-snmp-libs mtr geolite2* gnome-calendar gnome-weather cheese gnome-contacts ibus-typing-booster *m17n* mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* dos2unix kpartx rng-tools ppp* xfs* tracker* thermald *perl* gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* *hangul*
+	   sudo dnf --skip-broken remove nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent teamd tcpdump sgpio adcli libreoffice* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour NetworkManager-vpnc-gnome podman* *speech* sos totem eog dmidecode yajl ibus-hangui vino realmd net-snmp-libs mtr geolite2* gnome-calendar gnome-weather cheese gnome-contacts ibus-typing-booster *m17n* mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* dos2unix kpartx rng-tools ppp* xfs* tracker* thermald *perl* gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* *hangul*
 	   ;;
 	21)
 	   ### Install Orchis Theme
