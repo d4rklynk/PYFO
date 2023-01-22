@@ -1,4 +1,5 @@
 gnome-tweaks
 gnome-extensions-app
 gnome-shell-extension-dash-to-dock
+gnome-shell-extension-appindicator
 vim
