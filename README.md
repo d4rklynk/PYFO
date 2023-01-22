@@ -8,11 +8,6 @@ So you will not have a bunch of sketchy software that you don't need.
 
 *N.B: This script is mostly based on osiris2600's [script](https://github.com/osiris2600/fedora-setup)*
 
-## NVidia
-
-You can't use NVidia drivers **with** the linux-hardened package.
-You need to sign your Nvidia modules.
-
 ## Install
 
 Clone this repo
