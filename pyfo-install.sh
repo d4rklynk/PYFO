@@ -28,12 +28,13 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          12 "Install Oh-My-ZSH - ZSH will be also installed"
          13 "Install minimal Oh-My-ZSH plugins"
          14 "Install Nvidia - Install akmod nvidia drivers and CUDA"
-         15 "Install linux-hardened - NOT NVIDIA USER - A linux hardened package from my COPR repo"
-	 16 "Harden your Fedora - Download kicksecure files, blacklisting unused modules, harden boot"
-         17 "Install hardened_malloc - A hardened_malloc package for fedora"
-         18 "Set default for hardened_malloc - If you don't know, do nothing"
-         19 "More hardening tweaks - NTS time, umask, firewall"
-	 20 "Set vim your default editor - Because who use nano"
+	 15 "Harden your Fedora - Download kicksecure files, blacklisting unused modules, harden boot"
+         16 "Install hardened_malloc - A hardened_malloc package for fedora"
+         17 "Set default for hardened_malloc - If you don't know, do nothing"
+         18 "More hardening tweaks - NTS time, umask, firewall"
+	 19 "Set vim your default editor - Because who use nano"
+	 20 "Debloat fedora"
+	 21 "Add maximise, minimise, close titlebars buttons"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -52,7 +53,7 @@ while [ "$CHOICE -ne 4" ]; do
         1)
             echo "Update system"
             sudo dnf upgrade -y
-            sudo dnf autoremove
+            sudo dnf autoremove -y
             notify-send "System updated - Reboot now" --expire-time=10
             ;;
         2)
@@ -64,24 +65,25 @@ while [ "$CHOICE -ne 4" ]; do
            ;;
         3)
             echo "Enable AutoUpdates"
-            sudo dnf install dnf-automatic
+            sudo dnf install -y dnf-automatic
             sudo systemctl enable --now dnf-automatic-install.timer
             notify-send "System updated - Reboot now" --expire-time=10
             ;;
         4)  
             echo "Enabling RPM Fusion"
             sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-	    sudo dnf upgrade --refresh
+	    sudo dnf upgrade --refresh -y
             sudo dnf group update -y core
             sudo dnf install -y dnf-plugins-core
             notify-send "RPM Fusion Enabled" --expire-time=10
             ;;
         5)  
             echo "Updating Firmware"
+	    sudo dnf upgrade -y
             sudo fwupdmgr get-devices 
             sudo fwupdmgr refresh --force 
-            sudo fwupdmgr get-updates 
-            sudo fwupdmgr update
+            sudo fwupdmgr get-updates -y
+            sudo fwupdmgr update -y
             ;;
         6)
             echo "Install Basic Software"
@@ -139,15 +141,8 @@ while [ "$CHOICE -ne 4" ]; do
             sudo dnf install -y akmod-nvidia
 	    sudo dnf install xorg-x11-drv-nvidia-cuda
             notify-send "All done" --expire-time=10
-	       ;;
-        15)
-            echo "Install kernel-hardened"
-            sudo dnf copr enable samsepi0l/HardHatOS
-            sudo dnf install -y kernel-hardened
-            sudo bash -c 'echo "kernel.unprivileged_userns_clone=1" > /etc/sysctl.d/10_kernel.unprivileged_userns_clone.conf'
-            notify-send "kernel-hardened has been installed (you must reboot to make it effective)" --expire-time=10
-           ;;
-	16)
+	    ;;
+	15)
 	    echo "Hardening Fedora [WIP]"
 	    ### Download sysctl files from kicksecure
 	    echo "Downloading sysctl files from kicksecure"
@@ -162,21 +157,26 @@ while [ "$CHOICE -ne 4" ]; do
 	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf > /etc/modprobe.d/30_security-misc.conf'
 	    notify-send "Fedora is hardened (you must reboot to make it effective)" --expire-time=10
 	    ;;       
-        17)
+        16)
             echo "Installing hardened_malloc"
             sudo dnf copr enable samsepi0l/HardHatOS
             sudo dnf install -y hardened_malloc
             notify-send "hardened_malloc installed (you must reboot to make it effective)" --expire-time=10
            ;;
-        18)
+        17)
             echo "Set hardening_malloc to default"
     	    sudo bash -c 'echo "libhardened_malloc.so" > /etc/ld.so.preload'
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
            ;;
-        19)
+        18)
 	    ### umask 
             echo "Set umask to 077 for all users instead of 022"
             sudo bash -c 'echo "umask 077" > /etc/profile.d/set-umask077-for-all-users.sh'
+	    ### Make home directory private
+	    chmod 700 /home/*
+	    ### SSH
+	    echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+	    echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 	    ### Firewall
             echo "Set firewall to drop zone"
             sudo firewall-cmd --set-default-zone=drop
@@ -186,12 +186,27 @@ while [ "$CHOICE -ne 4" ]; do
             echo "Replicate chrony.conf from GrapheneOS"
             sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
             sudo systemctl restart chronyd
+	    ### Hardening
+	    mkdir -p /etc/systemd/system/NetworkManager.service.d
+	    curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+	    mkdir -p /etc/systemd/system/irqbalance.service.d
+	    curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
+	    mkdir -p /etc/systemd/system/sshd.service.d
+	    curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
             echo "Hardening tweaks have been set up, you should reboot"
            ;;
-	20)
+	19)
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
 	   echo "if [ -z "$EDITOR" ]; then export EDITOR="/usr/bin/vim"; fi" | sudo tee /etc/profile.d/vim-default-editor.sh
+	   ;;
+	20)
+	   ### Debloating
+	   sudo dnf -y remove nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent teamd tcpdump sgpio adcli libreoffice* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour NetworkManager-vpnc-gnome podman* *speech* sos totem eog dmidecode yajl ibus-hangui vino twolame-libs realmd net-snmp-libs mtr geolite2* gnome-calendar gnome-weather cheese gnome-contacts ibus-typing-booster *m17n* mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* dos2unix kpartx rng-tools ppp* xfs* tracker* thermald *perl* gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* *hangul*
+	   ;;
+	21)
+	   ### Gsettings buttons
+	   gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 	   ;;
         98)
             echo "Reboot"
