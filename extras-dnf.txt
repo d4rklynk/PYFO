@@ -1,5 +1,8 @@
-google-chrome-stable
 steam
 unzip
 unrar
 virt-manager
+git
+gnome-shell-extension-openweather
+gnome-shell-extension-user-theme
+yubioath-desktop
