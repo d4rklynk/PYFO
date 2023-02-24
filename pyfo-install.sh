@@ -204,7 +204,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   echo "EXPORT VISUAL="vim"" >> /etc/environnement
 	   echo "EXPORT EDITOR="vim"" >> /etc/environnement
 	   ;;
-	21)
+	20)
 	   ### Install Orchis Theme
 	   sudo dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
 	   git clone https://github.com/vinceliuice/Orchis-theme.git ~/Downloads/Orchis-theme
@@ -214,14 +214,14 @@ while [ "$CHOICE -ne 4" ]; do
 	   gsettings set org.gnome.shell.extensions.user-theme name "Orchis"
 	   gsettings set org.gnome.desktop.interface gtk-theme "Orchis"
 	   ;;
-	22)
+	21)
 	   ### Install Tela circle icons theme
 	   git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git ~/Downloads/Tela-circle-icon-theme
 	   pushd ~/Downloads/Tela-circle-icon-theme
 	   ./install.sh -c
 	   gsettings set org.gnome.desktop.interface icon-theme "Tela-circle"
 	   ;;
-	23)
+	22)
 	   # Clocks and calendar settings
 	   gsettings set org.gnome.desktop.interface clock-format '24h'
 	   gsettings set org.gnome.desktop.interface clock-show-date true
