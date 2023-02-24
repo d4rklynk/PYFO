@@ -22,6 +22,14 @@ Make it executable
 
 `chmod +x pyfo-install.sh`
 
-Execute it
+Execute it (read [Usage](#usage) before executing)
 
 `./pyfo-install.sh`
+
+## Usage
+
+`basic-dnf.txt` > Really basic software, and needed for the script anyway. You probably don't want to edit it (but you **CAN**).
+`extras-dns.txt` > Bunch of software that you probably need, you **MUST** edit it to fit your needs.
+`flatpak-packages.txt` > Bunch of most used flatpak softwares, you **MUST** edit it to fit your needs. Check [Flathub](https://flathub.org/home) and search your software to find the flatpak ID.
+
+`gsettings.sh` > useless, I'll probably remove that in the near future.
