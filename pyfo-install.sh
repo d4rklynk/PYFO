@@ -201,17 +201,17 @@ while [ "$CHOICE -ne 4" ]; do
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
 	   if grep -qi '^export SUDO_EDITOR=' /etc/environment; then
-	   	sudo sed -i 's/^export SUDO_EDITOR=.*/^export SUDO_EDITOR="vim"/'
+	   	sudo sed -i 's/^export SUDO_EDITOR=.*/^export SUDO_EDITOR="vim"/' /etc/environment
 	   else
 	   	sudo bash -c 'echo "export SUDO_EDITOR="vim"" >> /etc/environment'
 	   fi
 	   if grep -qi '^export VISUAL=' /etc/environment; then
-	   	sudo sed -i 's/^export VISUAL=.*/^export VISUAL="vim"/'
+	   	sudo sed -i 's/^export VISUAL=.*/^export VISUAL="vim"/' /etc/environment
 	   else
 	   	sudo bash -c 'echo "export VISUAL="vim"" >> /etc/environment'
 	   fi
 	   if grep -qi '^export EDITOR=' /etc/environment; then
-	   	sudo sed -i 's/^export EDITOR=.*/^export EDITOR="vim"/'
+	   	sudo sed -i 's/^export EDITOR=.*/^export EDITOR="vim"/' /etc/environment
 	   else
 	   	sudo bash -c 'echo "export EDITOR="vim"" >> /etc/environment'
 	   fi
