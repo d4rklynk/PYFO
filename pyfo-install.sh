@@ -200,9 +200,21 @@ while [ "$CHOICE -ne 4" ]; do
 	19)
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
-	   sudo bash -c 'echo "export SUDO_EDITOR="vim"" >> /etc/environment'
-	   sudo bash -c 'echo "export VISUAL="vim"" >> /etc/environment'
-	   sudo bash -c 'echo "export EDITOR="vim"" >> /etc/environment'
+	   if grep -qi '^export SUDO_EDITOR=' /etc/environment; then
+	   	sudo sed -i 's/^export SUDO_EDITOR=.*/^export SUDO_EDITOR="vim"/'
+	   else
+	   	sudo bash -c 'echo "export SUDO_EDITOR="vim"" >> /etc/environment'
+	   fi
+	   if grep -qi '^export VISUAL=' /etc/environment; then
+	   	sudo sed -i 's/^export VISUAL=.*/^export VISUAL="vim"/'
+	   else
+	   	sudo bash -c 'echo "export VISUAL="vim"" >> /etc/environment'
+	   fi
+	   if grep -qi '^export EDITOR=' /etc/environment; then
+	   	sudo sed -i 's/^export EDITOR=.*/^export EDITOR="vim"/'
+	   else
+	   	sudo bash -c 'echo "export EDITOR="vim"" >> /etc/environment'
+	   fi
 	   ;;
 	20)
 	   ### Install Orchis Theme
