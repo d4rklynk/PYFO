@@ -246,7 +246,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   ;;
         98)
             echo "Reboot"
-            shutdown -r now
+            sudo bash -c 'shutdown -r now'
            ;;
         99)
           exit 0
