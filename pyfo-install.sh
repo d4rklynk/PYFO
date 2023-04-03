@@ -32,10 +32,11 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          16 "Install hardened_malloc - A hardened_malloc package for fedora"
          17 "Set default for hardened_malloc - If you don't know, do nothing"
          18 "More hardening tweaks - NTS time, umask, firewall"
-	 19 "Set vim your default editor - Because who use nano"
-	 20 "Install Orchis shell theme"
-	 21 "Install Tela Circle Icons theme"
-	 22 "Gnome layout settings - Clock 24h format, titlebar buttons"
+	 19 "Harden SSH - READ THE CODE FIRST, you need SSH KEYS"
+	 20 "Set vim your default editor - Because who use nano"
+	 21 "Install Orchis shell theme"
+	 22 "Install Tela Circle Icons theme"
+	 23 "Gnome layout settings - Clock 24h format, titlebar buttons"
          98 "Reboot your system"
 	 99 "Quit")
 
@@ -189,15 +190,19 @@ while [ "$CHOICE -ne 4" ]; do
             sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
             sudo systemctl restart chronyd
 	    ### Hardening
-	    mkdir -p /etc/systemd/system/NetworkManager.service.d
-	    curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
-	    mkdir -p /etc/systemd/system/irqbalance.service.d
-	    curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
-	    mkdir -p /etc/systemd/system/sshd.service.d
-	    curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
+	    sudo bash -c 'mkdir -p /etc/systemd/system/NetworkManager.service.d'
+	    sudo bash -c 'curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf'
+	    sudo bash -c 'mkdir -p /etc/systemd/system/irqbalance.service.d'
+	    sudo bash -c 'curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf'
             echo "Hardening tweaks have been set up, you should reboot"
            ;;
 	19)
+		# Harden SSH
+		echo "Download sshd_config from GrapheneOS configuration"
+		sudo bash -c 'curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/sshd_config -o /etc/ssh/sshd_config'
+		sudo systemctl restart sshd	
+	   ;;
+	20)
 	   ### vim default editor
 	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
 	   if grep -qi '^export SUDO_EDITOR=' /etc/environment; then
@@ -216,7 +221,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   	sudo bash -c 'echo "export EDITOR="vim"" >> /etc/environment'
 	   fi
 	   ;;
-	20)
+	21)
 	   ### Install Orchis Theme
 	   sudo dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
 	   git clone https://github.com/vinceliuice/Orchis-theme.git ~/Downloads/Orchis-theme
@@ -226,14 +231,14 @@ while [ "$CHOICE -ne 4" ]; do
 	   gsettings set org.gnome.shell.extensions.user-theme name "Orchis"
 	   gsettings set org.gnome.desktop.interface gtk-theme "Orchis"
 	   ;;
-	21)
+	22)
 	   ### Install Tela circle icons theme
 	   git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git ~/Downloads/Tela-circle-icon-theme
 	   pushd ~/Downloads/Tela-circle-icon-theme
 	   ./install.sh -c
 	   gsettings set org.gnome.desktop.interface icon-theme "Tela-circle"
 	   ;;
-	22)
+	23)
 	   # Clocks and calendar settings
 	   gsettings set org.gnome.desktop.interface clock-format '24h'
 	   gsettings set org.gnome.desktop.interface clock-show-date true
