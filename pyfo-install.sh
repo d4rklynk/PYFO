@@ -32,7 +32,7 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          16 "Install hardened_malloc - A hardened_malloc package for fedora"
          17 "Set default for hardened_malloc - If you don't know, do nothing"
          18 "More hardening tweaks - NTS time, umask, firewall"
-	 19 "Harden SSH - DO NOT. READ THE CODE FIRST and what it implies.
+	 19 "Harden SSH - DO NOT. READ THE CODE FIRST and what it implies."
 	 20 "Set vim your default editor - Because who use nano"
 	 21 "Install Orchis shell theme"
 	 22 "Install Tela Circle Icons theme"
