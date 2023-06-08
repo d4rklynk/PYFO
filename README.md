@@ -1,7 +1,7 @@
 # PYFO
 PYFO (Put Your Fedora On) is a post-install script for upstream version of fedora. It also focuses on security.
 
-This script has been tested for Fedora Workstation 37 and Fedora Server 37.
+This script has been tested for Fedora Workstation 37< and Fedora Server 37<.
 
 The script will make the default zone to `drop` in Fedora Server too, you can revert to public by doing this command :
 
