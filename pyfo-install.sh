@@ -199,7 +199,7 @@ while [ "$CHOICE -ne 4" ]; do
 	19)
 		# Harden SSH
 		echo "Download sshd_config from GrapheneOS configuration"
-		sudo bash -c 'curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/sshd_config -o /etc/ssh/sshd_config'
+		sudo bash -c 'curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/ssh/sshd_config -o /etc/ssh/sshd_config'
 		
 		# /!\/!\/!\ Change samsepi0l with the user you want to connect, for example if your name is darlene, do like so :
 		# -> sudo sed -i 's/AllowUsers {{ssh_users}}/AllowUsers darlene/' /etc/ssh/sshd_config
