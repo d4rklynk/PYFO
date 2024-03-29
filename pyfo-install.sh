@@ -1,20 +1,27 @@
 #!/usr/bin/env bash
-HEIGHT=20
-WIDTH=90
-CHOICE_HEIGHT=4
-BACKTITLE="PYFO by samsepi0l - Initally by Osiris - https://lsass.co.uk"
-TITLE="Please Make a selection"
-MENU="Please Choose one of the following options:"
+
+height=20
+width=90
+choice_height=4
+backtitle="PYFO by samsepi0l - Initally by Osiris - https://lsass.co.uk"
+title="Make a selection"
+menu="Choose one of the following options:"
 
 #Other variables
-OH_MY_ZSH_URL="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+oh_my_zsh_url="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
 
 #Check to see if Dialog is installed, if not install it - Thanks Kinkz_nl
 if [ $(rpm -q dialog 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
-sudo dnf install -y dialog
+  dnf install -y dialog
 fi
 
-OPTIONS=(1 "Update your system - Do that first if you did not already"
+#Check to see if firewalld is installed, if not install it - Thanks Kinkz_nl
+if [ $(rpm -q firewalld 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
+  dnf install -y firewalld
+  systemctl enable --now firewalld
+fi
+
+options=(1 "Update your system - Do that first if you did not already"
          2 "Speed up DNF - This enables fastestmirror, max downloads and deltarpms"   
          3 "Enable AutoUpdates - Recommended"
          4 "Enable RPM Fusion - Enables the RPM Fusion repos for your specific version"
@@ -40,61 +47,61 @@ OPTIONS=(1 "Update your system - Do that first if you did not already"
          98 "Reboot your system"
 	 99 "Quit")
 
-while [ "$CHOICE -ne 4" ]; do
-    CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --nocancel \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
+while [ "$choice -ne 4" ]; do
+  choice=$(dialog --clear \
+    --backtitle "$backtitle" \
+    --title "$title" \
+    --nocancel \
+    --menu "$menu" \
+    $height $width $choice_height \
+    "${options[@]}" \
+    2>&1 >/dev/tty)
 
     clear
-    case $CHOICE in
+    case $choice in
         1)
             echo "Update system"
-            sudo dnf upgrade -y
-            sudo dnf autoremove -y
+            dnf upgrade -y
+            dnf autoremove -y
             notify-send "System updated - Reboot now" --expire-time=10
             ;;
         2)
             echo "Speeding Up DNF"
-            echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-            echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-            echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
+            echo 'fastestmirror=1' | tee -a /etc/dnf/dnf.conf
+            echo 'max_parallel_downloads=10' | tee -a /etc/dnf/dnf.conf
+            echo 'deltarpm=true' | tee -a /etc/dnf/dnf.conf
             notify-send "Your DNF config has now been amended" --expire-time=10
            ;;
         3)
             echo "Enable AutoUpdates"
-            sudo dnf install -y dnf-automatic
-            sudo systemctl enable --now dnf-automatic-install.timer
+            dnf install -y dnf-automatic
+            systemctl enable --now dnf-automatic-install.timer
             notify-send "System updated - Reboot now" --expire-time=10
             ;;
         4)  
             echo "Enabling RPM Fusion"
-            sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-	    sudo dnf upgrade --refresh -y
-            sudo dnf group update -y core
-            sudo dnf install -y dnf-plugins-core
+            dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+	    dnf upgrade --refresh -y
+            dnf group update -y core
+            dnf install -y dnf-plugins-core
             notify-send "RPM Fusion Enabled" --expire-time=10
             ;;
         5)  
             echo "Updating Firmware"
-	    sudo dnf upgrade -y
-            sudo fwupdmgr get-devices 
-            sudo fwupdmgr refresh --force 
-            sudo fwupdmgr get-updates -y
-            sudo fwupdmgr update -y
+	        dnf upgrade -y
+            fwupdmgr get-devices 
+            fwupdmgr refresh --force 
+            fwupdmgr get-updates -y
+            fwupdmgr update -y
             ;;
         6)
             echo "Install Basic Software"
-            sudo dnf install -y $(cat basic-dnf.txt)
+            dnf install -y $(cat basic-dnf.txt)
             notify-send "Basic Software have been installed" --expire-time=10
             ;;
         7)  
             echo "Installing Extras Software"
-            sudo dnf install -y $(cat extras-dnf.txt)
+            dnf install -y $(cat extras-dnf.txt)
             notify-send "Extras Software have been installed" --expire-time=10
             ;;
         8)
@@ -110,24 +117,24 @@ while [ "$CHOICE -ne 4" ]; do
             ;;    
         10)  
             echo "Installing Brave"
-            sudo dnf install -y dnf-plugins-core
-            sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
-            sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-            sudo dnf install -y brave-browser
+            dnf install -y dnf-plugins-core
+            dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+            rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+            dnf install -y brave-browser
             notify-send "Brave has been installed" --expire-time=10
             ;;
         11)  
             echo "Installing Videos packages"
-            sudo dnf install gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
-            sudo dnf install -y lame\* --exclude=lame-devel
-            sudo dnf group upgrade -y --with-optional Multimedia
-            sudo dnf update -y
+            dnf install gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
+            dnf install -y lame\* --exclude=lame-devel
+            dnf group upgrade -y --with-optional Multimedia
+            dnf update -y
             notify-send "All done" --expire-time=10
            ;;
         12)  
             echo "Installing Oh-My-Zsh"
-            sudo dnf -y install zsh util-linux-user
-            sh -c "$(curl -fsSL $OH_MY_ZSH_URL)"
+            dnf -y install zsh util-linux-user
+            sh -c "$(curl -fsSL $oh_my_zsh_url)"
             echo "change shell to ZSH"
             chsh -s "$(which zsh)"
             notify-send "Oh-My-Zsh is ready to rock n roll" --expire-time=10
@@ -140,97 +147,97 @@ while [ "$CHOICE -ne 4" ]; do
             ;;
         14)  
             echo "Installing Nvidia Driver Akmod-Nvidia"
-            sudo dnf install -y akmod-nvidia
-	    sudo dnf install xorg-x11-drv-nvidia-cuda
+            dnf install -y akmod-nvidia
+	        dnf install xorg-x11-drv-nvidia-cuda
             notify-send "All done" --expire-time=10
 	    ;;
 	15)
 	    echo "Hardening Fedora [WIP]"
 	    ### Download sysctl files from kicksecure
 	    echo "Downloading sysctl files from kicksecure"
-	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf > /etc/sysctl.d/30_security-misc.conf'
-	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf > /etc/sysctl.d/30_silent-kernel-printk.conf'
-	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf > /etc/sysctl.d/30_security-misc_kexec-disable.conf'
+	    curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf > /etc/sysctl.d/30_security-misc.conf
+	    curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf > /etc/sysctl.d/30_silent-kernel-printk.conf
+	    curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf > /etc/sysctl.d/30_security-misc_kexec-disable.conf
 	    ### Harden boot parameters
 	    # echo "Hardening Boot paramaters"
-	    # sudo bash -c 'sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="slab_nomerge init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on vsyscall=none debugfs=off oops=panic lockdown=confidentiality mce=0 quiet loglevel=0 spectre_v2=on spec_store_bypass_disable=on tsx=off tsx_async_abort=full,nosmt mds=full,nosmt l1tf=full,force nosmt=force kvm.nx_huge_pages=force randomize_kstack_offset=on"''
-	    # sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+	    # bash -c 'sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="slab_nomerge init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on vsyscall=none debugfs=off oops=panic lockdown=confidentiality mce=0 quiet loglevel=0 spectre_v2=on spec_store_bypass_disable=on tsx=off tsx_async_abort=full,nosmt mds=full,nosmt l1tf=full,force nosmt=force kvm.nx_huge_pages=force randomize_kstack_offset=on"''
+	    # grub2-mkconfig -o /boot/grub2/grub.cfg
 	    # echo "You can add "module.sig_enforce=1" if you signed your Nvidia drivers"
 	    ### Modules blacklisting
-	    sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf > /etc/modprobe.d/30_security-misc.conf'
+	    curl -fsSL https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf > /etc/modprobe.d/30_security-misc.conf
 	    notify-send "Fedora is hardened (you must reboot to make it effective)" --expire-time=10
 	    ;;       
         16)
             echo "Installing hardened_malloc"
-            sudo dnf copr enable samsepi0l/HardHatOS
-            sudo dnf install -y hardened_malloc
+            dnf copr enable samsepi0l/HardHatOS
+            dnf install -y hardened_malloc
             notify-send "hardened_malloc installed (you must reboot to make it effective)" --expire-time=10
            ;;
         17)
             echo "Set hardening_malloc to default"
-    	    sudo bash -c 'echo "libhardened_malloc.so" > /etc/ld.so.preload'
+    	    echo "libhardened_malloc.so" > /etc/ld.so.preload
             notify-send "hardening_malloc has been set to default (you must reboot to make it effective)" --expire-time=10
            ;;
         18)
-	    ### umask 
+	        ### umask 
             echo "Set umask to 077 for all users instead of 022"
-            sudo bash -c 'echo "umask 077" > /etc/profile.d/set-umask077-for-all-users.sh'
-	    ### Make home directory private
-	    chmod 700 /home/*
-	    ### SSH
-	    echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
-	    echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
-	    ### Firewall
+            echo "umask 077" > /etc/profile.d/set-umask077-for-all-users.sh
+	        ### Make home directory private
+	        chmod 700 /home/*
+	        ### SSH
+	        echo "GSSAPIAuthentication no" | tee /etc/ssh/ssh_config.d/10-custom.conf
+	        echo "VerifyHostKeyDNS yes" | tee -a /etc/ssh/ssh_config.d/10-custom.conf
+	        ### Firewall
             echo "Set firewall to drop zone"
-            sudo firewall-cmd --set-default-zone=drop
-            sudo firewall-cmd --add-protocol=ipv6-icmp --permanent
-            sudo firewall-cmd --add-service=dhcpv6-client --permanent
-	    ### NTS
+            firewall-cmd --set-default-zone=drop
+            firewall-cmd --add-protocol=ipv6-icmp --permanent
+            firewall-cmd --add-service=dhcpv6-client --permanent
+	        ### NTS
             echo "Replicate chrony.conf from GrapheneOS"
-            sudo bash -c 'curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf'
-            sudo systemctl restart chronyd
-	    ### Hardening
-	    sudo bash -c 'mkdir -p /etc/systemd/system/NetworkManager.service.d'
-	    sudo bash -c 'curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf'
-	    sudo bash -c 'mkdir -p /etc/systemd/system/irqbalance.service.d'
-	    sudo bash -c 'curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf'
+            curl -fsSL https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf > /etc/chrony.conf
+            systemctl restart chronyd
+	        ### Hardening
+	        mkdir -p /etc/systemd/system/NetworkManager.service.d
+	        curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+	        mkdir -p /etc/systemd/system/irqbalance.service.d
+	        curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
             echo "Hardening tweaks have been set up, you should reboot"
            ;;
 	19)
 		# Harden SSH
 		echo "Download sshd_config from GrapheneOS configuration"
-		sudo bash -c 'curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/ssh/sshd_config -o /etc/ssh/sshd_config'
+		curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/ssh/sshd_config -o /etc/ssh/sshd_config
 		
 		# /!\/!\/!\ Change samsepi0l with the user you want to connect, for example if your name is darlene, do like so :
-		# -> sudo sed -i 's/AllowUsers {{ssh_users}}/AllowUsers darlene/' /etc/ssh/sshd_config
+		# -> sed -i 's/AllowUsers {{ssh_users}}/AllowUsers darlene/' /etc/ssh/sshd_config
 		# and for multiples users, like darlene and Angela do so :
-		# -> sudo sed -i 's/AllowUsers {{ssh_users}}/AllowUsers darlene Angela/' /etc/ssh/sshd_config
-		sudo sed -i 's/AllowUsers {{ssh_users}}/AllowUsers samsepi0l/' /etc/ssh/sshd_config
-		sudo sed -i 's/KexAlgorithms sntrup761x25519-sha512@openssh.com/KexAlgorithms curve25519-sha256/' /etc/ssh/sshd_config
-		sudo systemctl restart sshd	
+		# -> sed -i 's/AllowUsers {{ssh_users}}/AllowUsers darlene Angela/' /etc/ssh/sshd_config
+		sed -i 's/AllowUsers {{ssh_users}}/AllowUsers root/' /etc/ssh/sshd_config
+		sed -i 's/KexAlgorithms sntrup761x25519-sha512@openssh.com/KexAlgorithms curve25519-sha256/' /etc/ssh/sshd_config
+		systemctl restart sshd	
 	   ;;
 	20)
 	   ### vim default editor
-	   sudo rm -f /etc/profile.d/nano-default-editor.{csh,sh}
+	   rm -f /etc/profile.d/nano-default-editor.{csh,sh}
 	   if grep -qi '^export SUDO_EDITOR=' /etc/environment; then
-	   	sudo sed -i 's/^export SUDO_EDITOR=.*/export SUDO_EDITOR="vim"/' /etc/environment
+	    sed -i 's/^export SUDO_EDITOR=.*/export SUDO_EDITOR="vim"/' /etc/environment
 	   else
-	   	sudo bash -c 'echo "export SUDO_EDITOR="vim"" >> /etc/environment'
+	   	echo "export SUDO_EDITOR="vim"" >> /etc/environment
 	   fi
 	   if grep -qi '^export VISUAL=' /etc/environment; then
-	   	sudo sed -i 's/^export VISUAL=.*/export VISUAL="vim"/' /etc/environment
+	   	sed -i 's/^export VISUAL=.*/export VISUAL="vim"/' /etc/environment
 	   else
-	   	sudo bash -c 'echo "export VISUAL="vim"" >> /etc/environment'
+	   	echo "export VISUAL="vim"" >> /etc/environment
 	   fi
 	   if grep -qi '^export EDITOR=' /etc/environment; then
-	   	sudo sed -i 's/^export EDITOR=.*/export EDITOR="vim"/' /etc/environment
+	   	sed -i 's/^export EDITOR=.*/export EDITOR="vim"/' /etc/environment
 	   else
-	   	sudo bash -c 'echo "export EDITOR="vim"" >> /etc/environment'
+	   	echo "export EDITOR="vim"" >> /etc/environment
 	   fi
 	   ;;
 	21)
 	   ### Install Orchis Theme
-	   sudo dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
+	   dnf install -y gtk-murrine-engine sassc gnome-shell-extension-user-theme
 	   git clone https://github.com/vinceliuice/Orchis-theme.git ~/Downloads/Orchis-theme
 	   pushd ~/Downloads/Orchis-theme
 	   ./install.sh -l --tweaks compact macos
@@ -258,7 +265,7 @@ while [ "$CHOICE -ne 4" ]; do
 	   ;;
         98)
             echo "Reboot"
-            sudo bash -c 'shutdown -r now'
+            shutdown -r now
            ;;
         99)
           exit 0
