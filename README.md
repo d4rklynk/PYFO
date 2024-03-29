@@ -1,4 +1,5 @@
 # PYFO
+
 PYFO (Put Your Fedora On) is a post-install script for upstream version of fedora. It also focuses on security.
 
 This script has been tested for Fedora Workstation 37-39 and Fedora Server 37-39.
@@ -37,5 +38,3 @@ Execute it (read [Usage](#usage) before executing)
 `extras-dns.txt` > Bunch of software that you probably need, you **MUST** edit it to fit your needs.
 
 `flatpak-packages.txt` > Bunch of most used flatpak softwares, you **MUST** edit it to fit your needs. Check [Flathub](https://flathub.org/home) and search your software to find the flatpak ID.
-
-`gsettings.sh` > useless, I'll probably remove that in the near future.
